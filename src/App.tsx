@@ -1,33 +1,37 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
+import AnimeTable, { Anime } from './AnimeTable'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const animes: Anime[] = [
+    {
+      "id": 9250,
+			"title": "リコリス・リコイル",
+			"official_site_url": "https://lycoris-recoil.com"
+		},
+		{
+			"id": 7266,
+			"title": "メイドインアビス 烈日の黄金郷",
+			"official_site_url": "http://miabyss.com/"
+		},
+		{
+			"id": 8631,
+			"title": "異世界おじさん",
+			"official_site_url": "https://isekaiojisan.com/"
+		},
+		{
+			"id": 9086,
+			"title": "よふかしのうた",
+			"official_site_url": "https://yofukashi-no-uta.com"
+		},
+		{
+			"id": 6292,
+			"title": "映画 ゆるキャン△",
+			"official_site_url": "https://yurucamp.jp/cinema/"
+		}
+  ];
 
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
+    <AnimeTable animes={animes}></AnimeTable>
   )
 }
 
