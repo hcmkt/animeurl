@@ -1,34 +1,33 @@
+import { useState, useEffect } from 'react';
+import axios from 'axios'
 import AnimeTable, { Anime } from './AnimeTable'
 import './App.css'
 
 function App() {
-  const animes: Anime[] = [
-    {
-      "id": 9250,
-			"title": "リコリス・リコイル",
-			"official_site_url": "https://lycoris-recoil.com"
-		},
-		{
-			"id": 7266,
-			"title": "メイドインアビス 烈日の黄金郷",
-			"official_site_url": "http://miabyss.com/"
-		},
-		{
-			"id": 8631,
-			"title": "異世界おじさん",
-			"official_site_url": "https://isekaiojisan.com/"
-		},
-		{
-			"id": 9086,
-			"title": "よふかしのうた",
-			"official_site_url": "https://yofukashi-no-uta.com"
-		},
-		{
-			"id": 6292,
-			"title": "映画 ゆるキャン△",
-			"official_site_url": "https://yurucamp.jp/cinema/"
-		}
-  ];
+  const [animes, setAnimes] = useState([]);
+  const [page, setPage] = useState(1);
+
+  async function getAnimes(page: number) {
+    if (!page) return;
+    const response = await axios.get('https://api.annict.com/v1/works', {
+      headers: {
+        Authorization: `Bearer ${import.meta.env.VITE_ANNICT_ACCESS_TOKEN}`,
+      },
+      params: {
+        fields: 'id,title,official_site_url',
+        filter_season: '2022-spring',
+        page: page,
+        per_page: 50,
+        sort_watchers_count: 'desc',
+      }
+    });
+    setAnimes(animes.length ? [...animes, ...response.data.works] : response.data.works);
+    setPage(response.data.next_page);
+  };
+
+  useEffect(() => {
+      getAnimes(page);
+  }, [page]);
 
   return (
     <AnimeTable animes={animes}></AnimeTable>
