@@ -37,9 +37,11 @@ function AnimeTable(props: Props) {
             <Tr key={x.id}>
               <Td>{x.title}</Td>
               <Td>
-                <Link href={x.official_site_url} isExternal>
-                  {x.official_site_url} <ExternalLinkIcon mx='2px' />
-                </Link>
+                {x.official_site_url &&
+                  <Link href={x.official_site_url} isExternal>
+                    {x.official_site_url} <ExternalLinkIcon mx='2px' />
+                  </Link>
+                }
               </Td>
             </Tr>
           ))}
