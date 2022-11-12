@@ -1,33 +1,36 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
+import { useState, useEffect } from 'react';
+import axios from 'axios'
+import AnimeTable, { Anime } from './AnimeTable'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [animes, setAnimes] = useState([]);
+  const [page, setPage] = useState(1);
+
+  async function getAnimes(page: number) {
+    if (!page) return;
+    const response = await axios.get('https://api.annict.com/v1/works', {
+      headers: {
+        Authorization: `Bearer ${import.meta.env.VITE_ANNICT_ACCESS_TOKEN}`,
+      },
+      params: {
+        fields: 'id,title,official_site_url',
+        filter_season: '2022-spring',
+        page: page,
+        per_page: 50,
+        sort_watchers_count: 'desc',
+      }
+    });
+    setAnimes(animes.length ? [...animes, ...response.data.works] : response.data.works);
+    setPage(response.data.next_page);
+  };
+
+  useEffect(() => {
+      getAnimes(page);
+  }, [page]);
 
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
+    <AnimeTable animes={animes}></AnimeTable>
   )
 }
 
