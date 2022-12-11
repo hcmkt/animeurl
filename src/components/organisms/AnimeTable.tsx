@@ -10,20 +10,13 @@ import {
   TableContainer,
   Link,
 } from '@chakra-ui/react';
-
-interface Anime {
-  id: number;
-  title: string;
-  official_site_url: string;
-}
+import { Work } from 'domains/annict';
 
 type Props = {
-  animes: Anime[];
+  animes: Work[];
 };
 
-const AnimeTable: FC<Props> = (props) => {
-  const { animes } = props;
-
+const AnimeTable: FC<Props> = ({ animes }) => {
   return (
     <TableContainer>
       <Table variant="simple">
@@ -38,7 +31,7 @@ const AnimeTable: FC<Props> = (props) => {
             <Tr key={x.id}>
               <Td>{x.title}</Td>
               <Td>
-                {x.official_site_url && (
+                {x.official_site_url != null && (
                   <Link href={x.official_site_url} isExternal>
                     {x.official_site_url} <ExternalLinkIcon mx="2px" />
                   </Link>
