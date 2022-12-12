@@ -1,4 +1,4 @@
-import { FC, Dispatch, SetStateAction } from 'react';
+import { FC } from 'react';
 import {
   ChevronDownIcon,
   ChevronRightIcon,
@@ -13,27 +13,30 @@ import {
   Center,
 } from '@chakra-ui/react';
 import { seasons } from 'domains/annict';
+import { Link } from 'react-router-dom';
 
 type Props = {
   seasonIdx: number;
-  setSeasonIdx: Dispatch<SetStateAction<number>>;
 };
 
-const ControlBar: FC<Props> = ({ seasonIdx, setSeasonIdx }) => {
+const ControlBar: FC<Props> = ({ seasonIdx }) => {
   const seasonsLength = seasons.length;
+  const hasPrev = seasonIdx + 1 < seasonsLength;
+  const hasNext = seasonIdx - 1 >= 0;
+  const prevIdx = hasPrev ? seasonIdx + 1 : seasonIdx;
+  const nextIdx = hasNext ? seasonIdx - 1 : seasonIdx;
 
   return (
     <>
       <Center>
-        <Button
-          leftIcon={<ChevronLeftIcon />}
-          onClick={() => setSeasonIdx(seasonIdx + 1)}
-          visibility={seasonIdx + 1 < seasonsLength ? 'visible' : 'hidden'}
-        >
-          {seasonIdx + 1 < seasonsLength
-            ? seasons[seasonIdx + 1].nameText
-            : seasons[seasonIdx].nameText}
-        </Button>
+        <Link to={`/${seasons[prevIdx].name}`}>
+          <Button
+            leftIcon={<ChevronLeftIcon />}
+            visibility={hasPrev ? 'visible' : 'hidden'}
+          >
+            {seasons[prevIdx].nameText}
+          </Button>
+        </Link>
         <Menu autoSelect={false}>
           <MenuButton
             as={Button}
@@ -45,21 +48,20 @@ const ControlBar: FC<Props> = ({ seasonIdx, setSeasonIdx }) => {
           </MenuButton>
           <MenuList h={300} sx={{ overflowY: 'scroll' }}>
             {seasons.map((x, i) => (
-              <MenuItem key={i} onClick={() => setSeasonIdx(i)}>
-                {x.nameText}
-              </MenuItem>
+              <Link to={`/${x.name}`} key={i}>
+                <MenuItem>{x.nameText}</MenuItem>
+              </Link>
             ))}
           </MenuList>
         </Menu>
-        <Button
-          rightIcon={<ChevronRightIcon />}
-          onClick={() => setSeasonIdx(seasonIdx - 1)}
-          visibility={seasonIdx - 1 >= 0 ? 'visible' : 'hidden'}
-        >
-          {seasonIdx - 1 >= 0
-            ? seasons[seasonIdx - 1].nameText
-            : seasons[seasonIdx].nameText}
-        </Button>
+        <Link to={`/${seasons[nextIdx].name}`}>
+          <Button
+            rightIcon={<ChevronRightIcon />}
+            visibility={hasNext ? 'visible' : 'hidden'}
+          >
+            {seasons[nextIdx].nameText}
+          </Button>
+        </Link>
       </Center>
     </>
   );

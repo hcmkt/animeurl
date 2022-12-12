@@ -34,4 +34,4 @@ export const seasons = (() => {
   return seasons;
 })();
 
-export const initialSeasonIdx = 4;
+export const initialSeasonName = seasons[4].name;
