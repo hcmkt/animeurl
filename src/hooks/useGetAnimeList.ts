@@ -1,17 +1,21 @@
 import { useEffect, useState } from 'react';
-import { getWorks, seasons } from 'domains/annict';
+import { getWorks } from 'domains/annict';
 import type { Work } from 'domains/annict';
 
-export const useGetAnimeList = (seasonIdx: number): Work[] => {
+export const useGetAnimeList = (season: string): Work[] => {
   const [animes, setAnimes] = useState<Work[]>([]);
   const [page, setPage] = useState<number | null>(1);
 
   useEffect(() => {
     const load = async () => {
       if (page === null) return;
-      const works = await getWorks(seasons[seasonIdx].name, page);
-      setAnimes(animes.length ? [...animes, ...works.works] : works.works);
-      setPage(works.next_page);
+      try {
+        const works = await getWorks(season, page);
+        setAnimes(animes.length ? [...animes, ...works.works] : works.works);
+        setPage(works.next_page);
+      } catch (err) {
+        throw new Error(`season '${season}' not exists`);
+      }
     };
     void load();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -20,7 +24,7 @@ export const useGetAnimeList = (seasonIdx: number): Work[] => {
   useEffect(() => {
     setAnimes([]);
     setPage(1);
-  }, [seasonIdx]);
+  }, [season]);
 
   return animes;
 };

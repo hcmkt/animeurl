@@ -1,9 +1,7 @@
 import { FC } from 'react';
-import AnimeList from 'components/environments/AnimeList';
+import IndexRoutes from 'routes';
 import './App.css';
 
-const App: FC = () => {
-  return <AnimeList></AnimeList>;
-};
+const App: FC = () => <IndexRoutes />;
 
 export default App;
